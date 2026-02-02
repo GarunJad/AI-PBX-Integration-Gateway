@@ -5,4 +5,4 @@ require('./callTracker');
 require('./ari-ws');
 require('./api');
 
-console.log('🚀 AI-PBX Middleware Started');
+console.log('AI-PBX Middleware Started');
