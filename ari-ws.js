@@ -28,7 +28,7 @@ function connectARI() {
   );
 
   ws.on('open', () => {
-    console.log('✅ ARI Connected');
+    console.log('ARI Connected');
   });
 
   ws.on('message', async msg => {
@@ -39,7 +39,7 @@ function connectARI() {
 
       const ch = e.channel.id;
 
-      console.log('🤖 AI Call:', ch);
+      console.log('AI Call:', ch);
 
       await axios.post(
         `${ARI_URL}/channels/${ch}/answer`,
