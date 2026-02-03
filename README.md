@@ -136,13 +136,13 @@ cd freepbx
 ./install -n
 ```
 
-# 📞 AI-PBX Integration Gateway – Setup Guide
+# AI-PBX Integration Gateway – Setup Guide
 
 This guide explains how to configure FreePBX, Asterisk, and AI Middleware.
 
 ---
 
-## 📌 Prerequisites
+## Prerequisites
 
 - Debian 12 with FreePBX 17
 - Node.js (v18+)
@@ -152,7 +152,7 @@ This guide explains how to configure FreePBX, Asterisk, and AI Middleware.
 
 ---
 
-## ⚙️ Step 3: Configure Extensions
+## Step 3: Configure Extensions
 
 ### FreePBX GUI
 
@@ -173,7 +173,7 @@ Register phones using generated credentials.
 
 ---
 
-## 🔐 Step 4: Enable AMI
+##  Step 4: Enable AMI
 
 Edit file:
 
@@ -198,7 +198,7 @@ fwconsole reload
 
 ---
 
-## 🌐 Step 5: Enable ARI
+## Step 5: Enable ARI
 
 ### FreePBX GUI
 
@@ -224,7 +224,7 @@ asterisk -rx "ari show status"
 
 ---
 
-## 📞 Step 6: Configure Dialplan
+##  Step 6: Configure Dialplan
 
 Edit:
 
@@ -250,7 +250,7 @@ asterisk -rx "dialplan reload"
 
 ---
 
-## 📂 Step 7: Clone Repository
+## Step 7: Clone Repository
 
 ```bash
 git clone <your-repo-url>
@@ -259,7 +259,7 @@ cd AI-PBX/backend
 
 ---
 
-## 📦 Step 8: Install Dependencies
+## Step 8: Install Dependencies
 
 ```bash
 npm install
@@ -267,7 +267,7 @@ npm install
 
 ---
 
-## 📝 Step 9: Configure Environment
+## Step 9: Configure Environment
 
 Create `.env` file:
 
@@ -287,7 +287,7 @@ DB_URL=your_db_url
 
 ---
 
-## 🎙️ Step 10: Create Recording Directory
+## Step 10: Create Recording Directory
 
 ```bash
 mkdir -p /var/spool/asterisk/recording
@@ -297,7 +297,7 @@ chmod 775 /var/spool/asterisk/recording
 
 ---
 
-## ▶️ Step 11: Start Middleware
+## Step 11: Start Middleware
 
 ```bash
 node index.js
@@ -314,7 +314,7 @@ AI-PBX Middleware Started
 
 ---
 
-## 🧪 Step 12: Test System
+## Step 12: Test System
 
 ### Make Call
 
@@ -338,7 +338,7 @@ curl -u aiuser:password http://localhost:8088/ari/applications
 
 ---
 
-## 🔄 Reconnection Testing
+##  Reconnection Testing
 
 Restart Asterisk:
 
@@ -350,7 +350,7 @@ Middleware reconnects automatically.
 
 ---
 
-## ✅ Expected Result
+## Expected Result
 
 - Extensions register successfully
 - AI bridge works on 777
