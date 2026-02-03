@@ -1,0 +1,75 @@
+1. Difficulty in Finding Debian 12 ISO
+
+During the initial setup, most official and third-party links redirected to Debian 13.3, which is not compatible with the FreePBX 17 installation script.
+
+Debian 12 ISO was difficult to locate from common download sources.
+
+This caused delays in the setup process.
+
+Resolution:
+After extended searching, the official Debian archive repository was used to download Debian 12.
+The OS was then installed manually inside the virtual machine.
+
+2. Debian Installation on Virtual Machine
+
+Initial installation attempts failed due to incorrect ISO versions.
+
+Network and storage settings in VirtualBox were misconfigured.
+
+Guest OS tools were not properly installed, affecting performance.
+
+Resolution:
+Configured correct VM settings and successfully installed Debian 12 before proceeding with FreePBX installation.
+
+3. Network & VM Connectivity Issues
+
+IP address changed between 10.0.2.x (NAT) and 192.168.x.x (Bridged mode).
+
+This caused accessibility issues between host and VM.
+
+FreePBX web interface was not reachable initially.
+
+Resolution:
+Changed network mode to Bridged Adapter and added the host network to the trusted firewall zone.
+
+4. SIP Client (Zoiper) Registration Failures
+
+Zoiper showed 408 Request Timeout errors.
+
+Extensions failed to register initially.
+
+SIP traffic was blocked by firewall rules.
+
+Resolution:
+Configured firewall permissions and verified registration using pjsip show endpoints.
+
+5. FreePBX Web Interface Errors
+
+Frequent AJAX and server response errors occurred.
+
+Web interface sometimes stopped responding after applying configuration.
+
+Resolution:
+Restarted Apache and Asterisk services and corrected permission issues.
+
+6. Asterisk Manager Interface (AMI) Authentication Issues
+
+AMI login initially failed with authentication errors.
+
+Configuration files were overwritten by FreePBX.
+
+Duplicate user entries caused conflicts.
+
+Resolution:
+Configured AMI using FreePBX-supported files and verified using Telnet.
+
+7. Asterisk REST Interface (ARI) Configuration Problems
+
+ARI user added manually was not detected.
+
+ari show users did not reflect configuration changes.
+
+“Authentication required” error persisted.
+
+Resolution:
+Configured ARI via FreePBX interface and restarted services.
