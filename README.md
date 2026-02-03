@@ -135,3 +135,92 @@ tar xvf freepbx-17.0-latest.tgz
 cd freepbx
 ./start_asterisk start
 ./install -n
+```
+
+## AI-PBX Setup 
+
+```yaml
+
+  step_3_configure_extensions:
+    location: "FreePBX GUI → Applications → Extensions → Add Extension"
+    extensions:
+      - id: 101
+        protocol: PJSIP
+      - id: 102
+        protocol: PJSIP
+    note: "Register phones using generated credentials"
+
+  step_4_enable_ami:
+    file: "/etc/asterisk/manager_custom.conf"
+    config:
+      aiuser:
+        secret: yourpassword
+        read: all
+        write: all
+    reload_command: "fwconsole reload"
+
+  step_5_enable_ari:
+    location: "FreePBX → Settings → Asterisk REST Interface Users"
+    user:
+      username: aiuser
+      password: yourpassword
+      permissions: read_write
+    verify_command: "asterisk -rx \"ari show status\""
+
+  step_6_configure_dialplan:
+    file: "/etc/asterisk/extensions_custom.conf"
+    context: ai-stasis
+    extension: 777
+    dialplan:
+      - "NoOp(AI Bridge)"
+      - "Answer()"
+      - "Stasis(ai-bridge)"
+      - "Hangup()"
+    reload_command: "asterisk -rx \"dialplan reload\""
+
+  step_7_clone_repository:
+    commands:
+      - "git clone <your-repo-url>"
+      - "cd AI-PBX/backend"
+
+  step_8_install_dependencies:
+    command: "npm install"
+
+  step_9_configure_environment:
+    file: ".env"
+    variables:
+      ARI_USER: aiuser
+      ARI_PASS: yourpassword
+      AMI_USER: aiuser
+      AMI_PASS: yourpassword
+      DB_URL: your_db_url
+
+  step_10_create_recording_directory:
+    directory: "/var/spool/asterisk/recording"
+    commands:
+      - "mkdir -p /var/spool/asterisk/recording"
+      - "chown asterisk:asterisk /var/spool/asterisk/recording"
+      - "chmod 775 /var/spool/asterisk/recording"
+
+  step_11_start_middleware:
+    command: "node index.js"
+    expected_output:
+      - "AMI Connected"
+      - "ARI Connected"
+      - "API running on port 3000"
+      - "AI-PBX Middleware Started"
+
+  step_12_test_system:
+    make_call:
+      dial: "777"
+
+    check_api:
+      command: "curl http://localhost:3000/calls"
+
+    check_stasis_app:
+      command: "curl -u aiuser:password http://localhost:8088/ari/applications"
+
+  reconnection_testing:
+    restart_command: "fwconsole restart"
+    behavior: "Middleware automatically reconnects"
+```
