@@ -1,6 +1,6 @@
-# ✅ AI-PBX Integration Gateway
+#  AI-PBX Integration Gateway
 
-## 📌 Overview
+##  Overview
 
 This project implements an **AI-PBX Integration Gateway** using **FreePBX 17 on Debian 12** and a **Node.js middleware**.  
 The system bridges live telephony events with an AI processing layer using **AMI and ARI**, enabling:
@@ -11,7 +11,7 @@ The system bridges live telephony events with an AI processing layer using **AMI
 
 ---
 
-## 📊 Methodology
+##  Methodology
 
 The project was implemented in three major phases:
 
