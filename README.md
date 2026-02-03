@@ -98,3 +98,40 @@ Stores:
 
 **Endpoint:**  
 GET /calls
+Returns call history in JSON format.
+
+---
+
+##  Key Design Decisions
+
+- WebSocket-based ARI connection  
+- Async/Await architecture  
+- In-memory channel mapping  
+- Auto-reconnect logic  
+- WAV recording format  
+- Modular structure  
+
+---
+
+## Setup Instructions
+
+---
+
+### 1️. Prerequisites
+
+- Debian 12  
+- FreePBX 17  
+- Node.js v18+  
+- PostgreSQL / SQLite  
+- Two SIP phones or softphones  
+
+---
+
+### 2️. Install FreePBX
+
+```bash
+wget http://mirror.freepbx.org/modules/packages/freepbx/freepbx-17.0-latest.tgz
+tar xvf freepbx-17.0-latest.tgz
+cd freepbx
+./start_asterisk start
+./install -n
