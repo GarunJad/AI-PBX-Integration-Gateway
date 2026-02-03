@@ -97,8 +97,7 @@ Stores:
 #### 5️. REST API
 
 **Endpoint:**  
-GET /calls
-Returns call history in JSON format.
+GET /calls : Returns call history in JSON format.
 
 ---
 
@@ -137,90 +136,227 @@ cd freepbx
 ./install -n
 ```
 
-## AI-PBX Setup 
+# 📞 AI-PBX Integration Gateway – Setup Guide
 
-```yaml
+This guide explains how to configure FreePBX, Asterisk, and AI Middleware.
 
-  step_3_configure_extensions:
-    location: "FreePBX GUI → Applications → Extensions → Add Extension"
-    extensions:
-      - id: 101
-        protocol: PJSIP
-      - id: 102
-        protocol: PJSIP
-    note: "Register phones using generated credentials"
+---
 
-  step_4_enable_ami:
-    file: "/etc/asterisk/manager_custom.conf"
-    config:
-      aiuser:
-        secret: yourpassword
-        read: all
-        write: all
-    reload_command: "fwconsole reload"
+## 📌 Prerequisites
 
-  step_5_enable_ari:
-    location: "FreePBX → Settings → Asterisk REST Interface Users"
-    user:
-      username: aiuser
-      password: yourpassword
-      permissions: read_write
-    verify_command: "asterisk -rx \"ari show status\""
+- Debian 12 with FreePBX 17
+- Node.js (v18+)
+- Git
+- SIP Phones / Softphones
+- Sudo/root access
 
-  step_6_configure_dialplan:
-    file: "/etc/asterisk/extensions_custom.conf"
-    context: ai-stasis
-    extension: 777
-    dialplan:
-      - "NoOp(AI Bridge)"
-      - "Answer()"
-      - "Stasis(ai-bridge)"
-      - "Hangup()"
-    reload_command: "asterisk -rx \"dialplan reload\""
+---
 
-  step_7_clone_repository:
-    commands:
-      - "git clone <your-repo-url>"
-      - "cd AI-PBX/backend"
+## ⚙️ Step 3: Configure Extensions
 
-  step_8_install_dependencies:
-    command: "npm install"
+### FreePBX GUI
 
-  step_9_configure_environment:
-    file: ".env"
-    variables:
-      ARI_USER: aiuser
-      ARI_PASS: yourpassword
-      AMI_USER: aiuser
-      AMI_PASS: yourpassword
-      DB_URL: your_db_url
+Go to:
 
-  step_10_create_recording_directory:
-    directory: "/var/spool/asterisk/recording"
-    commands:
-      - "mkdir -p /var/spool/asterisk/recording"
-      - "chown asterisk:asterisk /var/spool/asterisk/recording"
-      - "chmod 775 /var/spool/asterisk/recording"
-
-  step_11_start_middleware:
-    command: "node index.js"
-    expected_output:
-      - "AMI Connected"
-      - "ARI Connected"
-      - "API running on port 3000"
-      - "AI-PBX Middleware Started"
-
-  step_12_test_system:
-    make_call:
-      dial: "777"
-
-    check_api:
-      command: "curl http://localhost:3000/calls"
-
-    check_stasis_app:
-      command: "curl -u aiuser:password http://localhost:8088/ari/applications"
-
-  reconnection_testing:
-    restart_command: "fwconsole restart"
-    behavior: "Middleware automatically reconnects"
 ```
+Applications → Extensions → Add Extension
+```
+
+Create:
+
+| Extension | Protocol |
+|-----------|----------|
+| 101       | PJSIP     |
+| 102       | PJSIP     |
+
+Register phones using generated credentials.
+
+---
+
+## 🔐 Step 4: Enable AMI
+
+Edit file:
+
+```bash
+sudo nano /etc/asterisk/manager_custom.conf
+```
+
+Add:
+
+```ini
+[aiuser]
+secret=yourpassword
+read=all
+write=all
+```
+
+Reload:
+
+```bash
+fwconsole reload
+```
+
+---
+
+## 🌐 Step 5: Enable ARI
+
+### FreePBX GUI
+
+Go to:
+
+```
+Settings → Asterisk REST Interface Users
+```
+
+Create user:
+
+| Field      | Value        |
+|------------|--------------|
+| Username   | aiuser       |
+| Password   | yourpassword |
+| Read/Write | Yes          |
+
+Verify:
+
+```bash
+asterisk -rx "ari show status"
+```
+
+---
+
+## 📞 Step 6: Configure Dialplan
+
+Edit:
+
+```bash
+sudo nano /etc/asterisk/extensions_custom.conf
+```
+
+Add:
+
+```ini
+[ai-stasis]
+exten => 777,1,NoOp(AI Bridge)
+ same => n,Answer()
+ same => n,Stasis(ai-bridge)
+ same => n,Hangup()
+```
+
+Reload:
+
+```bash
+asterisk -rx "dialplan reload"
+```
+
+---
+
+## 📂 Step 7: Clone Repository
+
+```bash
+git clone <your-repo-url>
+cd AI-PBX/backend
+```
+
+---
+
+## 📦 Step 8: Install Dependencies
+
+```bash
+npm install
+```
+
+---
+
+## 📝 Step 9: Configure Environment
+
+Create `.env` file:
+
+```bash
+nano .env
+```
+
+Add:
+
+```env
+ARI_USER=aiuser
+ARI_PASS=yourpassword
+AMI_USER=aiuser
+AMI_PASS=yourpassword
+DB_URL=your_db_url
+```
+
+---
+
+## 🎙️ Step 10: Create Recording Directory
+
+```bash
+mkdir -p /var/spool/asterisk/recording
+chown asterisk:asterisk /var/spool/asterisk/recording
+chmod 775 /var/spool/asterisk/recording
+```
+
+---
+
+## ▶️ Step 11: Start Middleware
+
+```bash
+node index.js
+```
+
+Expected Output:
+
+```
+AMI Connected
+ARI Connected
+API running on port 3000
+AI-PBX Middleware Started
+```
+
+---
+
+## 🧪 Step 12: Test System
+
+### Make Call
+
+Dial:
+
+```
+777
+```
+
+### Check API
+
+```bash
+curl http://localhost:3000/calls
+```
+
+### Check Stasis App
+
+```bash
+curl -u aiuser:password http://localhost:8088/ari/applications
+```
+
+---
+
+## 🔄 Reconnection Testing
+
+Restart Asterisk:
+
+```bash
+fwconsole restart
+```
+
+Middleware reconnects automatically.
+
+---
+
+## ✅ Expected Result
+
+- Extensions register successfully
+- AI bridge works on 777
+- AMI and ARI connected
+- Calls visible via API
+- Recordings saved
+- Auto-reconnect works
+
+---
