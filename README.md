@@ -48,3 +48,53 @@ The project was implemented in three major phases:
 - Tested resilience against Asterisk restarts  
 
 ---
+
+
+### Components
+
+#### 1️. AMI (Asterisk Manager Interface)
+
+- Listens for Newstate and Hangup events  
+- Captures call start and end time  
+- Calculates call duration  
+- Stores metadata  
+
+---
+
+#### 2️. ARI (Asterisk REST Interface)
+
+- WebSocket-based real-time events  
+- Handles Stasis application `ai-bridge`  
+- Answers calls  
+- Plays prompt  
+- Records audio  
+- Triggers mock AI processing  
+
+---
+
+#### 3️. Node.js Middleware
+
+- Manages AMI and ARI connections  
+- Automatic reconnection  
+- Call-to-recording mapping  
+- Async event processing  
+
+---
+
+#### 4️. Database
+
+Stores:
+
+- Caller ID  
+- Destination  
+- Start time  
+- End time  
+- Duration  
+- AI transcription status  
+
+---
+
+#### 5️. REST API
+
+**Endpoint:**  
+GET /calls
